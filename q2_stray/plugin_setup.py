@@ -1,12 +1,14 @@
+import importlib
 import qiime2
 from qiime2.plugin import (Str, Int, Float, Choices, Citations,
                            Metadata, Categorical, Plugin)
 from q2_types.feature_table import FeatureTable, Frequency, Composition
 from q2_types.feature_data import FeatureData, Differential
 
-import q2_stray
-from q2_stray._method import pibble
-from q2_stray._type import StrayPosterior
+from q2_stray import (
+    StrayPosterior, StrayPosteriorFormat, StrayPosteriorDirFmt,
+    pibble
+)
 
 
 # TODO: will need to fix the version number
@@ -17,9 +19,10 @@ plugin = Plugin(
     version=__version__,
     website='https://github.com/mortonjt/q2-stray',
     package='q2_stray',
-    description=('Analysis Of Differential Abundance Taking '
-                 'Sample Variation Into Account'),
-    short_description='Plugin for differential abundance analysis.',
+    description=("Bayesian Multinomial Logistic Normal Models through "
+                 "Marginally Latent Matrix-T Processes"),
+    short_description=('Plugin for differential abundance analysis '
+                       'and time series.'),
     citations=Citations.load('citations.bib', package='q2_stray')
 )
 
@@ -34,9 +37,8 @@ plugin.methods.register_function(
                 'beta1': Float,
                 'beta2': Float
     },
-    outputs=[('differentials', FeatureData[Differential],
-             ('posterior', StrayPosterior)
-    )],
+    outputs=[('differentials', FeatureData[Differential]),
+             ('posterior', StrayPosterior)],
     input_descriptions={
         'table': 'The feature table of abundances.'
     },
@@ -54,3 +56,9 @@ plugin.methods.register_function(
 )
 
 # TODO: Need to add a visualizer to summarize the stray results
+plugin.register_formats(StrayPosteriorFormat, StrayPosteriorDirFmt)
+plugin.register_semantic_types(StrayPosterior)
+plugin.register_semantic_type_to_format(
+    StrayPosterior, StrayPosteriorDirFmt)
+
+importlib.import_module('q2_stray._transformer')

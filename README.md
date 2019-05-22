@@ -1,4 +1,5 @@
-q2-stray
+#q2-stray
+
 qiime2 plugin for aldex2 for differential abundance analysis and time series analysis
 
 #Installation Within your qiime2 environment run

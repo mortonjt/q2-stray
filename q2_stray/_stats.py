@@ -1,9 +1,9 @@
 from qiime2.plugin import SemanticType, model
-from q2_types.feature_data import FeatureData
+from q2_types.sample_data import SampleData
 
 
 StrayPosterior = SemanticType('StrayPosterior',
-                           variant_of=FeatureData.field['type'])
+                              variant_of=SampleData.field['type'])
 
 
 class StrayPosteriorFormat(model.TextFileFormat):
@@ -12,4 +12,4 @@ class StrayPosteriorFormat(model.TextFileFormat):
 
 
 StrayPosteriorDirFmt = model.SingleFileDirectoryFormat(
-    'StrayPosteriorDirFmt', 'conditionals.tsv', StrayPosteriorFormat)
+    'StrayPosteriorDirFmt', 'posterior.tsv', StrayPosteriorFormat)

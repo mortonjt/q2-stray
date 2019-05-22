@@ -27,7 +27,7 @@ def pibble(table: pd.DataFrame,
            formula: str,
            learning_rate: float=1e-3,
            beta1: float=0.9,
-           beta2: float=0.99) -> pd.DataFrame, pd.DataFrame:
+           beta2: float=0.99) -> (pd.DataFrame, pd.DataFrame):
 
     with tempfile.TemporaryDirectory() as temp_dir_name:
         biom_fp = os.path.join(temp_dir_name, 'input.tsv.biom')

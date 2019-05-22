@@ -10,7 +10,7 @@ from setuptools import setup, find_packages
 import versioneer
 
 setup(
-    name="q2-aldex2",
+    name="q2-stray",
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
     packages=find_packages(),
@@ -23,7 +23,7 @@ setup(
     entry_points={
         'qiime2.plugins': ['q2-stray=q2_stray.plugin_setup:plugin']
     },
-    scripts=['q2_stray/assets/run_stray.R'],
+    scripts=['q2_stray/assets/run_pibble.R'],
     package_data={
         "q2_stray": ['citations.bib'],
     },

@@ -1,3 +1,5 @@
+#!/usr/bin/env Rscript
+
 library(phyloseq)
 library(stray)
 library(dplyr)
@@ -24,23 +26,17 @@ Y <- otu_table(dat)
 
 ntaxa = dim(otu)[1]
 
-upsilon <- ntaxa(dat)+3
-m <- diag(ntaxa(dat)) + 0.5*vcv.phylo(phy_tree(dat), corr=TRUE) # Weak Phylo Prior
-GG <- cbind(diag(ntaxa(dat)-1), -1)
-Xi <- (upsilon-ntaxa(dat)-2)*GG%*%m%*%t(GG)
-Theta <- matrix(0, ntaxa(dat)-1, nrow(X))
+# TODO: add an option for phylogenetic prior
+# no phylogenetic prior
+m <- rowMeans(alr_array(Y+0.65, parts=1))
+upsilon <- D-1+3
+Theta <- matrix(0, D-1, N)
+Theta[] <- m
+Xi <- matrix(.4, D-1, D-1)
+diag(Xi) <- 1
 Gamma <- diag(nrow(X))
 
-priors <- pibble(NULL, X, upsilon, Theta, Gamma, Xi)
-
-priors$Y <- Y # add data to priors object
-Xi <- (upsilon-ntaxa(dat)-2)*GG%*% diag(ntaxa(dat)) %*%t(GG) # update Xi prior
-Xi_clr <- driver::alrvar2clrvar(Xi, ntaxa(dat)) # need to add it in CLR coords
-priors$Xi <- Xi_clr # add new prior to mongrelfit object
-verify(priors) # run internal checks to make sure modified object is okay
-
-
-fit <- refit(priors, step_size=0.005, b1=beta1, b2=beta2, decomp_method="cholesky")
+fit <- pibble(Y, diag(N), upsilon, Theta, Gamma, Xi)
 fit_lambda <- summary(fit, pars="Lambda")$Lambda
 posterior <- pibble_tidy_samples(fit)
 

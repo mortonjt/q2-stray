@@ -29,7 +29,7 @@ plugin = Plugin(
 plugin.methods.register_function(
     function=pibble,
     name=('Analysis Of Differential Abundance'),
-    description=('Performs differential abundance test with phylogenetic prior.'),
+    description=('Performs differential abundance test.'),
     inputs={'table': FeatureTable[Frequency]},
     parameters={'metadata': Metadata,
                 'formula': Str,
